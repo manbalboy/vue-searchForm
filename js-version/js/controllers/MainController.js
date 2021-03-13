@@ -17,7 +17,8 @@ export default {
         TabView.setup(document.querySelector('#tabs'))
             .on('@change', e => this.onChangeTab(e.detail.tabName));
 
-        KeywordView.setup(document.querySelector('#search-keyword'));
+        KeywordView.setup(document.querySelector('#search-keyword'))
+            .on('@click', e => this.onClickKeyword(e.detail.keyword));
         ResultView.setup(document.querySelector('#search-result'));
 
         
@@ -32,15 +33,20 @@ export default {
 
 
         if(this.selectedTab === "추천 검색어") {
-            KeywordModel.list().then(data => {
-                KeywordView.render(data);
-            })
+            this.fetchSearchKeyword();
+           
         } else {
 
         }
 
 
         ResultView.hide();
+    },
+
+    fetchSearchKeyword() {
+        KeywordModel.list().then(data => {
+            KeywordView.render(data);
+        })
     },
 
     search(query) {
@@ -62,11 +68,20 @@ export default {
 
 
     onSearchResult(data) {
+        TabView.hide();
+        KeywordView.hide();
         ResultView.render(data);
     },
 
     onChangeTab(tabName) {
         console.log(tag, 'onChangeTab()');
         
+    },
+
+    onClickKeyword(keyword) {
+        console.log(tag, 'onClickKeyword()', keyword);
+        this.search(keyword);
     }
+
+
 }
