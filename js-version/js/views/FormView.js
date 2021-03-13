@@ -10,6 +10,7 @@ FormView.setup = function(el) {
     this.resetEl = el.querySelector('[type=reset]');
     this.bindEvents();
     this.showResetBtn(false);
+    return this;
 }
 
 FormView.showResetBtn = function (show = true) {
@@ -17,11 +18,29 @@ FormView.showResetBtn = function (show = true) {
 }
 
 FormView.bindEvents = function (){
+    this.on('submit', e => e.preventDefault())
     this.inputEl.addEventListener('keyup', e => this.onKeyup(e));
+    this.resetEl.addEventListener('click', e => this.onClickReset());
 };
 
-FormView.onKeyup = function () {
+FormView.onKeyup = function (e) {
+    const enter = 13;
+    if(!this.inputEl.value.length) {
+        this.emit('@reset');
+    }
     this.showResetBtn(this.inputEl.value.length);
+    if(e.keyCode !== enter) {
+        return ;
+    }
+
+    this.emit('@submit', {input: this.inputEl.value});
+}
+
+
+FormView.onClickReset = function () {
+    this.inputEl.value = "";
+    this.showResetBtn(false);
+    this.emit('@reset');
 }
 
 export default FormView;
