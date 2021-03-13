@@ -14,7 +14,6 @@ export default {
         ResultView.setup(document.querySelector('#search-result'))
     },
 
-    
     search(query) {
         console.log(tag, 'search()', query);
         SearchModel.list(query).then(data => {

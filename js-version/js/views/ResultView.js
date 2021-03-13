@@ -9,13 +9,28 @@ ResultView.setup = function (el) {
     return this;
 }
 
+ResultView.messages = {
+    NO_RESULT: '검색 결과가 없습니다'
+  }
+
 ResultView.render = function (data = []) {
     console.log(tag, 'render', data) ; 
-    this.el.innerHTML = data.length ? this.getSearchResultsHtml(data) : '검색 결과가 없습니다.';
+    this.el.innerHTML = data.length ? this.getSearchResultsHtml(data) : this.messages.NO_RESULT;
+    this.show();
 }
 
 ResultView.getSearchResultsHtml = function (data) {
+    return data.reduce((html , item) => {
+        html += this.getSearchItemHtml(item)
+        return html;
+    }, '<ul>') + '</ul>';
+}
 
+ResultView.getSearchItemHtml = function (item) {
+    return `<li>
+    <image src="${item.image}"/>
+    <p>${item.name}</p>
+    </li>`;
 }
 
 export default ResultView;
