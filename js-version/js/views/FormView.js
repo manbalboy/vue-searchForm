@@ -38,7 +38,6 @@ FormView.onKeyup = function (e) {
 
 
 FormView.onClickReset = function () {
-    this.inputEl.value = "";
     this.showResetBtn(false);
     this.emit('@reset');
 }
